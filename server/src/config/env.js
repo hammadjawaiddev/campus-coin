@@ -79,12 +79,18 @@ env.isEmailConfigured = Boolean(env.EMAIL_HOST && env.EMAIL_USER && env.EMAIL_PA
 env.isAiConfigured = Boolean(env.AI_API_KEY);
 
 if (!isTest && env.isProd && !env.JWT_SECRET) {
-  // Refuse to boot a production server with a predictable signing key.
-  throw new Error('JWT_SECRET must be set when NODE_ENV=production');
+  // Soft-fail so the serverless function can still boot and return a clear
+  // JSON error instead of a cryptic FUNCTION_INVOCATION_FAILED page.
+  console.error('JWT_SECRET must be set when NODE_ENV=production');
+  env.JWT_SECRET = '';
+  env.missingJwtSecret = true;
+} else {
+  env.missingJwtSecret = false;
 }
 
 if (!env.isProd && !env.JWT_SECRET) {
   env.JWT_SECRET = 'campus-coin-dev-secret-change-me';
+  env.missingJwtSecret = false;
 }
 
 module.exports = env;
