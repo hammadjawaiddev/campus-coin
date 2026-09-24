@@ -18,6 +18,20 @@ async function ensureDb() {
 }
 
 module.exports = async (req, res) => {
+  const env = require('../server/src/config/env');
+  if (env.missingJwtSecret) {
+    res.statusCode = 503;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: 'Server misconfigured: set JWT_SECRET in Vercel Environment Variables, then redeploy.',
+        details: { code: 'MISSING_JWT_SECRET' },
+      }),
+    );
+    return;
+  }
+
   try {
     await ensureDb();
   } catch (error) {
@@ -26,7 +40,7 @@ module.exports = async (req, res) => {
     res.end(
       JSON.stringify({
         success: false,
-        message: 'Database unavailable. Check MONGODB_URI and Atlas network access (allow 0.0.0.0/0 for serverless).',
+        message: 'Database unavailable. Set MONGODB_URI in Vercel and allow 0.0.0.0/0 in Atlas Network Access.',
         details: { code: 'DB_UNAVAILABLE', error: error.message },
       }),
     );
