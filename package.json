@@ -1,0 +1,10 @@
+{
+  "name": "campus-coin",
+  "private": true,
+  "description": "Campus Coin monorepo — deploy the Vite client from /client",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "preview": "npm --prefix client run preview"
+  }
+}
