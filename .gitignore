@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Build outputs
+client/dist/
+server/dist/
+coverage/
+*.log
+npm-debug.log*
+
+# Local Mongo / memory-server caches
+server/.mongo-data/
+server/.mongo-bin/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test / tooling
+playwright-report/
+test-results/
+.cache/
+
+# Accidental installer downloads
+*.exe
+*.msi
+

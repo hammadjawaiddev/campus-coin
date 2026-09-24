@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Campus Coin design tokens.
+ * Dark is the default brand experience; light is a fully supported equivalent.
+ */
+@layer base {
+  :root {
+    --cc-canvas: 245 246 251;
+    --cc-surface: 255 255 255;
+    --cc-surface-muted: 246 247 252;
+    --cc-surface-raised: 255 255 255;
+    --cc-border: 226 230 240;
+    --cc-text: 15 23 42;
+    --cc-text-muted: 82 94 121;
+    --cc-text-soft: 130 141 165;
+    --cc-chart-grid: 226 230 240;
+  }
+
+  .dark {
+    --cc-canvas: 11 16 32;
+    --cc-surface: 18 25 51;
+    --cc-surface-muted: 22 30 58;
+    --cc-surface-raised: 27 36 64;
+    --cc-border: 40 52 84;
+    --cc-text: 240 244 252;
+    --cc-text-muted: 168 180 205;
+    --cc-text-soft: 128 141 170;
+    --cc-chart-grid: 39 51 82;
+  }
+
+  * {
+    border-color: rgb(var(--cc-border));
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'tnum';
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: rgba(109, 93, 251, 0.28);
+  }
+
+  /* Slim, themed scrollbars */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--cc-border));
+    border-radius: 999px;
+    border: 3px solid rgb(var(--cc-canvas));
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--cc-text-soft)); }
+
+  :focus-visible {
+    outline: 2px solid #6D5DFB;
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* ── Surfaces ───────────────────────────────────────────────────────── */
+  .cc-card {
+    @apply rounded-2xl border border-surface-border bg-surface shadow-soft;
+  }
+
+  .cc-card-glass {
+    @apply rounded-2xl border border-white/10 backdrop-blur-xl;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  }
+
+  .cc-card-hover {
+    @apply transition-all duration-300 ease-smooth hover:-translate-y-0.5 hover:shadow-lift;
+  }
+
+  .cc-section {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Buttons ────────────────────────────────────────────────────────── */
+  .cc-btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-xl text-sm font-semibold
+           transition-all duration-200 ease-smooth disabled:cursor-not-allowed disabled:opacity-50;
+    min-height: 2.5rem;
+    padding: 0.55rem 1rem;
+  }
+
+  .cc-btn-primary {
+    @apply cc-btn bg-brand-500 text-white shadow-[0_10px_30px_-12px_rgba(109,93,251,.9)]
+           hover:bg-brand-600 hover:shadow-[0_16px_38px_-14px_rgba(109,93,251,1)] active:scale-[.98];
+  }
+
+  .cc-btn-secondary {
+    @apply cc-btn border border-surface-border bg-surface-raised text-ink
+           hover:border-brand-400/60 hover:bg-brand-500/5 active:scale-[.98];
+  }
+
+  .cc-btn-ghost {
+    @apply cc-btn text-ink-muted hover:bg-brand-500/8 hover:text-ink;
+  }
+
+  .cc-btn-danger {
+    @apply cc-btn bg-rose-500 text-white hover:bg-rose-600 active:scale-[.98];
+  }
+
+  .cc-btn-success {
+    @apply cc-btn bg-mint-500 text-white hover:bg-mint-600 active:scale-[.98];
+  }
+
+  .cc-btn-sm { @apply rounded-lg px-3 py-1.5 text-xs; min-height: 2rem; }
+  .cc-btn-lg { @apply rounded-2xl px-6 py-3 text-base; min-height: 3rem; }
+  .cc-btn-icon { @apply h-10 w-10 p-0; }
+  .cc-btn-icon-sm { @apply h-8 w-8 p-0; }
+
+  /* ── Inputs ─────────────────────────────────────────────────────────── */
+  .cc-label {
+    @apply mb-1.5 block text-sm font-medium text-ink-muted;
+  }
+
+  .cc-input {
+    @apply w-full rounded-xl border border-surface-border bg-surface-muted px-3.5 py-2.5 text-sm text-ink
+           placeholder:text-ink-soft transition-colors duration-200
+           focus:border-brand-400 focus:bg-surface focus:outline-none focus:ring-4 focus:ring-brand-500/12
+           disabled:cursor-not-allowed disabled:opacity-60;
+    min-height: 2.75rem;
+  }
+
+  .cc-select {
+    @apply cc-input cursor-pointer appearance-none pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818FA5' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+  }
+
+  .cc-textarea { @apply cc-input min-h-[96px] resize-y leading-relaxed; }
+  .cc-input-error { @apply border-rose-400/70 focus:border-rose-400 focus:ring-rose-500/15; }
+  .cc-error-text { @apply mt-1.5 flex items-center gap-1 text-xs font-medium text-rose-500; }
+
+  /* ── Badges ─────────────────────────────────────────────────────────── */
+  .cc-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-2xs font-semibold uppercase tracking-wide;
+  }
+  .cc-badge-info { @apply cc-badge bg-brand-500/12 text-brand-500 dark:text-brand-300; }
+  .cc-badge-success { @apply cc-badge bg-mint-500/14 text-mint-600 dark:text-mint-400; }
+  .cc-badge-warning { @apply cc-badge bg-amber-500/14 text-amber-600 dark:text-amber-400; }
+  .cc-badge-danger { @apply cc-badge bg-rose-500/14 text-rose-600 dark:text-rose-400; }
+  .cc-badge-neutral { @apply cc-badge bg-ink-soft/12 text-ink-muted; }
+
+  /* ── Tables ─────────────────────────────────────────────────────────── */
+  .cc-table { @apply w-full border-collapse text-sm; }
+  .cc-th {
+    @apply border-b border-surface-border px-4 py-3 text-left text-2xs font-semibold uppercase
+           tracking-wider text-ink-soft whitespace-nowrap;
+  }
+  .cc-td { @apply border-b border-surface-border/70 px-4 py-3.5 align-middle text-ink; }
+  .cc-tr { @apply transition-colors duration-150 hover:bg-brand-500/[.045]; }
+
+  /* ── Misc ───────────────────────────────────────────────────────────── */
+  .cc-divider { @apply border-t border-surface-border; }
+
+  .cc-progress {
+    @apply h-2 w-full overflow-hidden rounded-full bg-ink-soft/15;
+  }
+  .cc-progress-bar {
+    @apply h-full rounded-full transition-[width] duration-700 ease-smooth;
+  }
+
+  .cc-skeleton {
+    @apply relative overflow-hidden rounded-lg bg-ink-soft/12;
+  }
+  .cc-skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+
+  .cc-tooltip {
+    @apply pointer-events-none absolute z-50 whitespace-nowrap rounded-lg border border-surface-border
+           bg-surface-raised px-2.5 py-1.5 text-xs font-medium text-ink opacity-0 shadow-lift
+           transition-opacity duration-150;
+  }
+  .cc-tooltip-parent:hover .cc-tooltip { @apply opacity-100; }
+
+  .cc-link { @apply font-medium text-brand-500 underline-offset-4 transition-colors hover:text-brand-600 hover:underline; }
+  .cc-scroll-x { @apply -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0; scrollbar-width: none; }
+  .cc-scroll-x::-webkit-scrollbar { display: none; }
+
+  .cc-grid-noise {
+    background-image: radial-gradient(rgba(109, 93, 251, 0.12) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
