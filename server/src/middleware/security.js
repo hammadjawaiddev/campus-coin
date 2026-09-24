@@ -17,11 +17,8 @@ const isAllowedOrigin = (origin) => {
   if (origin === 'null') return true; // sandboxed iframe previews
   try {
     const { hostname } = new URL(origin);
-    if (env.isProd && !env.EXTRA_ORIGINS.length) {
-      // In production only the configured client is allowed.
-      return hostname === new URL(env.CLIENT_URL).hostname;
-    }
-    return (
+    // Always allow local + common preview hosts (Vercel previews rotate subdomains).
+    if (
       hostname === 'localhost' ||
       hostname === '127.0.0.1' ||
       hostname === '0.0.0.0' ||
@@ -29,7 +26,13 @@ const isAllowedOrigin = (origin) => {
       hostname.endsWith('.vercel.app') ||
       hostname.endsWith('.netlify.app') ||
       hostname.endsWith('.onrender.com')
-    );
+    ) {
+      return true;
+    }
+    if (env.isProd) {
+      return hostname === new URL(env.CLIENT_URL).hostname;
+    }
+    return false;
   } catch {
     return false;
   }
